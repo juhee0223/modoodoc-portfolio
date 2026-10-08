@@ -8,7 +8,7 @@ from hashlib import sha256
 
 ROOT = Path(__file__).parent
 DATA = json.loads((ROOT / 'content.json').read_text())
-BASE = 'https://juhee0223.github.io/modoodoc-portfolio'
+BASE = 'https://juhee0223.github.io/juhee-portfolio'
 STYLE_VERSION = sha256((ROOT / 'styles.css').read_bytes()).hexdigest()[:10]
 SCRIPT_VERSION = sha256((ROOT / 'site.js').read_bytes()).hexdigest()[:10]
 CATS = {'service':'서비스 개발·운영','ai':'AI 응용','systems':'시스템 연구'}
@@ -42,8 +42,10 @@ def highlighted(text, slug):
 
 def shell(title, body, depth='', description='서비스 기획과 개발, 배포·운영 경험부터 AI 응용과 시스템 연구까지. 박주희의 프로젝트와 문제 해결 과정을 소개하는 포트폴리오.', canonical=''):
     home = depth+'index.html' if depth else ''
+    destination = BASE + '/' + canonical
     return f'''<!doctype html>
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<script>window.location.replace({json.dumps(destination)} + window.location.search + window.location.hash);</script>
 <title>{e(title)} · 박주희</title><meta name="description" content="{e(description)}">
 <meta name="theme-color" content="#ffffff"><meta property="og:title" content="{e(title)} · 박주희"><meta property="og:description" content="{e(description)}"><meta property="og:type" content="website"><meta property="og:url" content="{BASE}/{canonical}">
 <link rel="canonical" href="{BASE}/{canonical}"><link rel="icon" href="{depth}assets/favicon.svg" type="image/svg+xml">
@@ -54,6 +56,7 @@ def shell(title, body, depth='', description='서비스 기획과 개발, 배포
 <header class="site-header"><div class="nav-wrap"><a class="brand" href="{depth}index.html" aria-label="박주희 포트폴리오 홈"><span>박주희</span><small>Portfolio</small></a>
 <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">메뉴 <span aria-hidden="true">☰</span></button>
 <nav id="site-nav" aria-label="주요 메뉴"><a href="{home}#projects">프로젝트</a><a href="{home}#research">논문·출판</a><a href="{home}#awards">수상</a><a href="{home}#activities">활동</a><a href="{home}#credentials">자격증·어학</a><a class="nav-contact" href="{home}#contact">연락처</a></nav></div></header>
+<p class="container">포트폴리오 주소가 변경되었습니다. <a href="{e(destination)}">새 포트폴리오로 이동 →</a></p>
 {body}
 <footer class="site-footer"><div class="container footer-inner"><p>박주희 | 포트폴리오<br><span>© 2026 Park Juhee</span></p><a href="https://github.com/juhee0223" target="_blank" rel="noopener noreferrer">GitHub ↗</a><a href="#main">맨 위로 ↑</a></div></footer>
 </body></html>'''
